@@ -2,10 +2,10 @@
 
 Topic: Mexico’s Museum Directory
 
-Dataset
+Dataset:
 Datos abiertos : (cultura.gob.mx)
 
-Objective
+Objective:
 This project aims to create an interactive and visually compelling Museum Directory for México. Utilizing the data set available from sic.cultura.gob.mx, this directory will serve as a comprehensive resource for the nation's cultural diversity.
 
 Ideal Visuals

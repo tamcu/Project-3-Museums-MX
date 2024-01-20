@@ -1,10 +1,33 @@
-body {
-  padding: 0;
+body, html {
+  height: 100%;
   margin: 0;
 }
 
-#map,
-body,
-html {
-  height: 100%;
+.container {
+  display: flex;
+  height: 200vh;
+  flex-direction: column;
+}
+
+.map-container {
+  flex: 1.5;
+  display: flex;
+}
+
+#map {
+  flex: 1;
+}
+
+.menu-container {
+  flex: .1;
+  background-color: #f0f0f0;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.bar-container {
+  flex: 1;
+  background-color: #f0f0f0;
+  padding: 10px;
+  box-sizing: border-box;
 }

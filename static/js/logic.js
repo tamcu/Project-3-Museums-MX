@@ -30,6 +30,13 @@ d3.json("../Datasets/project_3.museums_mx.json").then(function (data){
 
 
 function plots(name_value){
+  // Clear previous markers
+  myMap.eachLayer(function(layer){
+    if (layer instanceof L.Marker){
+      layer.remove();
+    }
+  });
+  
   d3.json("../Datasets/project_3.museums_mx.json").then(function(records){
     let name_a = records.filter(rec => rec.nom_ent === name_value);
     /* let hover = name_a[0].museo_nombre; */    
@@ -41,7 +48,7 @@ function plots(name_value){
       } else {
         temas[r.museo_tematica_n1] = 1;
       }
-    }; 
+    };
     
     let bar_y = Object.keys(temas);
     let bar_x = Object.values(temas);
@@ -54,8 +61,31 @@ function plots(name_value){
       orientation: "h",
     }]; 
 
-    Plotly.newPlot("bar", bar_a);  
+    Plotly.newPlot("bar", bar_a);
 
+// Create a dictionary for the second bar chart
+let museos = {};
+records.forEach(function (record){
+  if(museos[record.nom_ent]){
+    museos[record.nom_ent] += 1;
+    } else {
+      museos[record.nom_ent] = 1;
+    }
+  });
+
+  let bar_y2 = Object.keys(museos);
+  let bar_x2 = Object.values(museos);
+    
+  let bar_a2 = [{
+    type: "bar",
+    x: bar_x2,
+    y: bar_y2,
+    orientation: "h",
+  }];
+
+  Plotly.newPlot("bar2", bar_a2);
+
+// Add markers to the map
     let markers = [];
     for(let i = 0; i < name_a.length; i++) {
       /* let museo = name_a[i]; */
@@ -79,6 +109,7 @@ function plots(name_value){
 
 function optionChanged(selectedValue){
   /* console.log(selectedValue); */
+  Plotly.purge("bar");
   plots(selectedValue);
 }
 

@@ -19,27 +19,25 @@
 </head>
 
 <body>
-  <!-- The div to hold the menu -->
-  <div class="row">
-    <div class="col-md-2">
-      <div class="well">
-        <h5>Museo:</h5>
-        <select id="selDataset" onchange="optionChanged(this.value)"></select>
-      </div>
-      <!-- <div class="panel panel-primary">
-        <div class="panel-heading">
-          <h3 class="panel-title">Museum info</h3>
-        </div>
-        <div id="sample-metadata" class="panel-body"></div>
-      </div> -->
-    </div>
-  </div>
+  <div class="container">
+    <div class="map-container">
+      <!-- the div that holds the map-->
+      <div id="map"></div>
 
-  <!-- The div that holds bar chart -->
-  <div id="bar"></div>
-  
-  <!-- The div that holds our map -->
-  <div id="map"></div>
+      <!-- The div to hold the menu -->
+      <div class="menu-container">
+        <div class="well">
+          <h5>Museos</h5>
+          <select id="selDataset" onchange="optionChanged(this.value)"></select>
+        </div>
+      </div>
+    </div>
+
+    <!-- The div that holds the first bar chart -->
+    <div class="bar-container" id="bar"></div>
+    <!-- The div that holds the second bar chart -->
+    <div class="bar-container" id="bar2"></div>
+  </div>
 
   <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"

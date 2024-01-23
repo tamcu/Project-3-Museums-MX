@@ -10,7 +10,7 @@ body, html {
 }
 
 .map-container {
-  flex: 1.5;
+  flex: 0.6;
   display: flex;
 }
 
@@ -25,9 +25,22 @@ body, html {
   box-sizing: border-box;
 }
 
+.bar-charts-container {
+  display: flex;
+}
+
 .bar-container {
   flex: 1;
   background-color: #f0f0f0;
   padding: 10px;
   box-sizing: border-box;
+  margin-right: 10px;
+}
+
+#bar {
+  width:100%;
+}
+
+#bar2 {
+  width:100%;
 }

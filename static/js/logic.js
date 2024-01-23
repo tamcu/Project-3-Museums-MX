@@ -19,27 +19,12 @@ let bar_a = [{
 
 let layout1 = {
   title: 'Bar Chart 1',
-  width: 900,  // Adjust the width to make it smaller
+  width: '100%',  // Adjust the width to make it smaller
   height: 500, // Adjust the height to make it smaller
+  yaxis: { automargin: true },
 };
 
 Plotly.newPlot("bar", bar_a, layout1);
-
-// Create empty initial second bar chart
-let bar_a2 = [{
-  type: "bar",
-  x: [],
-  y: [],
-  orientation: "h",
-}];
-
-let layout2 = {
-  title: 'Bar Chart 2',
-  width: 1000,  // Adjust the width to make it smaller
-  height: 500, // Adjust the height to make it smaller
-};
-
-Plotly.newPlot("bar2", bar_a2, layout2);
 
 d3.json("../Datasets/project_3.museums_mx.json").then(function (data) {
   let estados = [];
@@ -57,6 +42,32 @@ d3.json("../Datasets/project_3.museums_mx.json").then(function (data) {
     dropdownMenu.append("option").text(nombre).property("value", nombre);
   });
 });
+
+// Create empty initial second bubble chart
+let bubble_a = [{
+  type: "scatter",
+  mode: "markers",
+  x: [],
+  y: [],
+  marker: {
+    size: [],
+    sizemode: "diameter",
+    color: "blue",
+    opacity: 0.8,
+    line: {
+      color: "white",
+      width: 1
+    }
+  }
+}];
+
+let bubbleLayout = {
+  title: 'Bubble Chart',
+  width: '100%',
+  height: 500,
+};
+
+Plotly.newPlot("bar2", bubble_a, bubbleLayout);
 
 function plots(name_value) {
   // Clear previous markers
@@ -84,75 +95,30 @@ function plots(name_value) {
     // Update the first bar chart
     Plotly.update("bar", { x: [bar_x], y: [bar_y] });
 
-    // Create a dictionary for the second bar chart
-    let museos = {};
-    records.forEach(function (record) {
-      if (museos[record.nom_ent]) {
-        museos[record.nom_ent] += 1;
-      } else {
-        museos[record.nom_ent] = 1;
-      }
+
+    let bubbleData = Object.values(museos);
+
+    // Update the bubble chart
+    Plotly.update("bar2", {
+      x: bubbleData.map(data => data.lon),
+      y: bubbleData.map(data => data.lat),
+      marker: { size: bubbleData.map(data => data.size * 10) } // Adjust the factor for a suitable size
     });
-
-    let bar_y2 = Object.keys(museos);
-    let bar_x2 = Object.values(museos);
-
-    // Update the second bar chart
-    Plotly.update("bar2", { x: [bar_x2], y: [bar_y2] });
 
     // Add markers to the map
     let markers = [];
     for (let i = 0; i < name_a.length; i++) {
       let marker = L.marker([name_a[i].gmaps_latitud, name_a[i].gmaps_longitud])
         .bindPopup(`<h1>${name_a[i].museo_nombre}</h1> <hr> 
-        <h3>Municipio: ${name_a[i].nom_mun}</h3> <hr> 
-        <h3>Localidad: ${name_a[i].nom_loc}</h3>`)
+         <h3>Municipio: ${name_a[i].nom_mun}</h3> <hr> 
+         <h3>Localidad: ${name_a[i].nom_loc}</h3>`)
         .addTo(myMap);
       markers.push(marker);
     }
   });
-};
+}
 
 function optionChanged(selectedValue) {
   plots(selectedValue);
 }
-//create a function to set the marker
-//console.log(data[0].gmaps_latitud, data[0].gmaps_longitud)
-
-/*
-let markers = []
-for (let i = 0; i < 30; i++) {
-    let museo = data[i];
-    let marker = L.marker([museo.gmaps_latitud, museo.gmaps_longitud])
-      .bindPopup(`<h1>${museo.museo_nombre}</h1> <hr> <h3>Population ${museo.nom_ent.toLocaleString()}</h3>`)
-      .addTo(myMap);
-    markers.push(marker)
-  } */
-
-
-
-
-
-
-
-function optionChanged(selectedValue){
-  /* console.log(selectedValue); */
-  Plotly.purge("bar");
-  plots(selectedValue);
-}
-
-
-//create a function to set the marker
-//console.log(data[0].gmaps_latitud, data[0].gmaps_longitud)
-
-/*
-let markers = []
-for (let i = 0; i < 30; i++) {
-    let museo = data[i];
-    let marker = L.marker([museo.gmaps_latitud, museo.gmaps_longitud])
-      .bindPopup(`<h1>${museo.museo_nombre}</h1> <hr> <h3>Population ${museo.nom_ent.toLocaleString()}</h3>`)
-      .addTo(myMap);
-    markers.push(marker)
-  } */
-
 

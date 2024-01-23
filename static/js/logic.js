@@ -1,3 +1,4 @@
+
 // Create the map centered at TX
 let myMap = L.map("map", {
   center: [20.5335298, -99.9407924],
@@ -6,7 +7,8 @@ let myMap = L.map("map", {
 
 // Insert the base layer to the map
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  /* link: 'Powered by <a href="https://www.geoapify.com/">Geoapify</a>', */
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors', 
 }).addTo(myMap);
 
 // Create empty initial bar chart
@@ -26,18 +28,28 @@ let layout1 = {
 
 Plotly.newPlot("bar", bar_a, layout1);
 
-d3.json("../Datasets/project_3.museums_mx.json").then(function (data) {
+d3.json("../Datasets/project_3.museums_mx_csv.json").then(function (data) {
   let estados = [];
-  estados[0] = data[0].nom_ent;
-  for (let j = 0; j < data.length; j++) {
+  estados[0] = data[0].nom_ent; 
+  let cantidades = [];
+  let suma = 1;
+  for (let j = 1; j < data.length; j++) {
     if (estados.includes(data[j].nom_ent)) {
-      ;
+      suma ++;
     } else {
+      cantidades.push(suma);
       estados.push(data[j].nom_ent);
+      suma = 1;
     }
   };
+  cantidades.push(suma);
+  console.log(cantidades);
+  console.log(estados);
+
+  plotBubble(estados, cantidades);
 
   let dropdownMenu = d3.select("#selDataset");
+  dropdownMenu.append("option").text("Select me!");
   estados.forEach(function (nombre) {
     dropdownMenu.append("option").text(nombre).property("value", nombre);
   });
@@ -51,7 +63,7 @@ function plots(name_value) {
     }
   });
 
-  d3.json("../Datasets/project_3.museums_mx.json").then(function (records) {
+  d3.json("../Datasets/project_3.museums_mx_csv.json").then(function (records) {
     let name_a = records.filter(rec => rec.nom_ent === name_value);
 
     let temas = {};
@@ -68,7 +80,6 @@ function plots(name_value) {
 
     // Update the first bar chart
     Plotly.update("bar", { x: [bar_x], y: [bar_y] });
-
 
     // Add markers to the map
     let markers = [];
@@ -87,40 +98,26 @@ function optionChanged(selectedValue) {
   plots(selectedValue);
 }
 
-d3.json("../Datasets/project_3.museums_mx.json").then(function (data) {
-  let estados = [];
-  let estado_i = [];
-  estados[0] = data[0].nom_ent;
-  estado_i[0] = 16
-  for (let j = 0; j < data.length; j++) {
-    if (estados.includes(data[j].nom_ent)) {
-      ;
-    } else {
-      estado_i.push(j);
-      estados.push(data[j].nom_ent);
-    }
-    
-  };
-  console.log(estado_i)
-  console.log(estados)
-  
+function plotBubble(estados, cantidades){
   let bubble_a = [{
     x: estados,
-    y: estado_i,
-    text: estados,
+    y: cantidades,
+    /* text: estados, */
     mode: "markers",
     marker: {
-      size: estado_i/10,
-      color: estados,
-      colorscale: "Mars"
+      size: cantidades.map(c => Math.sqrt(20 * c)), 
+      color: cantidades,
+      colorscale: "Jet",
     },
   }];
 
-  let bubble_l = {
-    margin: {t: 30},
-    xaxis: {title: 'estados'},
+  let layout2 = {
+    title: 'Bubble Chart',
+    width: '100%',  // Adjust the width to make it smaller
+    height: 500, // Adjust the height to make it smaller
+    xaxis: { automargin: true },
+    /* yaxis: { automargin: true }, */
+  };
+
+  Plotly.newPlot("bar2", bubble_a, layout2);
 };
-
-
-  Plotly.newPlot("bar2", bubble_a, bubble_l);
-});

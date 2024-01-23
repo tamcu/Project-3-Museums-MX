@@ -95,8 +95,8 @@ function plots(name_value) {
     // Update the first bar chart
     Plotly.update("bar", { x: [bar_x], y: [bar_y] });
 
-
-    let bubbleData = Object.values(museos);
+    // Use temas instead of museos here
+    let bubbleData = Object.values(temas);
 
     // Update the bubble chart
     Plotly.update("bar2", {
@@ -121,4 +121,3 @@ function plots(name_value) {
 function optionChanged(selectedValue) {
   plots(selectedValue);
 }
-

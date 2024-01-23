@@ -43,32 +43,6 @@ d3.json("../Datasets/project_3.museums_mx.json").then(function (data) {
   });
 });
 
-// Create empty initial second bubble chart
-let bubble_a = [{
-  type: "scatter",
-  mode: "markers",
-  x: [],
-  y: [],
-  marker: {
-    size: [],
-    sizemode: "diameter",
-    color: "blue",
-    opacity: 0.8,
-    line: {
-      color: "white",
-      width: 1
-    }
-  }
-}];
-
-let bubbleLayout = {
-  title: 'Bubble Chart',
-  width: '100%',
-  height: 500,
-};
-
-Plotly.newPlot("bar2", bubble_a, bubbleLayout);
-
 function plots(name_value) {
   // Clear previous markers
   myMap.eachLayer(function (layer) {
@@ -85,7 +59,7 @@ function plots(name_value) {
       if (temas[r.museo_tematica_n1]) {
         temas[r.museo_tematica_n1] += 1;
       } else {
-        temas[r.museo_tematica_n1] = 1;
+        temas[r.museo_tematica_n1] =  1;
       }
     };
 
@@ -95,15 +69,6 @@ function plots(name_value) {
     // Update the first bar chart
     Plotly.update("bar", { x: [bar_x], y: [bar_y] });
 
-
-    let bubbleData = Object.values(museos);
-
-    // Update the bubble chart
-    Plotly.update("bar2", {
-      x: bubbleData.map(data => data.lon),
-      y: bubbleData.map(data => data.lat),
-      marker: { size: bubbleData.map(data => data.size * 10) } // Adjust the factor for a suitable size
-    });
 
     // Add markers to the map
     let markers = [];
@@ -122,3 +87,40 @@ function optionChanged(selectedValue) {
   plots(selectedValue);
 }
 
+d3.json("../Datasets/project_3.museums_mx.json").then(function (data) {
+  let estados = [];
+  let estado_i = [];
+  estados[0] = data[0].nom_ent;
+  estado_i[0] = 16
+  for (let j = 0; j < data.length; j++) {
+    if (estados.includes(data[j].nom_ent)) {
+      ;
+    } else {
+      estado_i.push(j);
+      estados.push(data[j].nom_ent);
+    }
+    
+  };
+  console.log(estado_i)
+  console.log(estados)
+  
+  let bubble_a = [{
+    x: estados,
+    y: estado_i,
+    text: estados,
+    mode: "markers",
+    marker: {
+      size: estado_i/10,
+      color: estados,
+      colorscale: "Mars"
+    },
+  }];
+
+  let bubble_l = {
+    margin: {t: 30},
+    xaxis: {title: 'estados'},
+};
+
+
+  Plotly.newPlot("bar2", bubble_a, bubble_l);
+});

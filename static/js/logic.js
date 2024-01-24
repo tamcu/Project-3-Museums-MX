@@ -1,8 +1,8 @@
 
-// Create the map centered at TX
+// Create the map, originally centered at TX
 let myMap = L.map("map", {
-  center: [20.5335298, -99.9407924],
-  zoom: 5,
+  center: [18.5335298, -99.9407924],
+  zoom: 5.4,
 });
 
 // Insert the base layer to the map
@@ -20,7 +20,7 @@ let bar_a = [{
 }];
 
 let layout1 = {
-  title: 'Bar Chart 1',
+  title: 'Quantity of museums in selected state, per topic',
   width: '100%',  // Adjust the width to make it smaller
   height: 500, // Adjust the height to make it smaller
   yaxis: { automargin: true },
@@ -43,13 +43,11 @@ d3.json("../Datasets/project_3.museums_mx_csv.json").then(function (data) {
     }
   };
   cantidades.push(suma);
-  console.log(cantidades);
-  console.log(estados);
 
   plotBubble(estados, cantidades);
 
   let dropdownMenu = d3.select("#selDataset");
-  dropdownMenu.append("option").text("Select me!");
+  dropdownMenu.append("option").text("Select a state...");
   estados.forEach(function (nombre) {
     dropdownMenu.append("option").text(nombre).property("value", nombre);
   });
@@ -75,7 +73,7 @@ function plots(name_value) {
       }
     };
 
-    let bar_y = Object.keys(temas);
+    let bar_y = Object.keys(temas).sort();
     let bar_x = Object.values(temas);
 
     // Update the first bar chart
@@ -87,7 +85,10 @@ function plots(name_value) {
       let marker = L.marker([name_a[i].gmaps_latitud, name_a[i].gmaps_longitud])
         .bindPopup(`<h1>${name_a[i].museo_nombre}</h1> <hr> 
          <h3>Municipio: ${name_a[i].nom_mun}</h3> <hr> 
-         <h3>Localidad: ${name_a[i].nom_loc}</h3>`)
+         <h3>Temática: ${name_a[i].museo_tematica_n1}</h3>
+         <h3>Adscripción: ${name_a[i].museo_adscripcion}</h3>
+         <h3>Teléfono: ${name_a[i].museo_telefono1}</h3>
+         <h3>Web: ${name_a[i].pagina_web}</h3>`)
         .addTo(myMap);
       markers.push(marker);
     }
@@ -99,10 +100,22 @@ function optionChanged(selectedValue) {
 }
 
 function plotBubble(estados, cantidades){
-  let bubble_a = [{
+  console.log(estados);
+  console.log(cantidades);
+  
+/*   let chart = c3.generate({
+    bindto : "#bar2",
+    data : {
+      x : "x", 
+      columns : [["x"].concat(estados), ["y"].concat(cantidades),],
+      type : "scatter",
+    },
+    type : bubble, 
+  }); */
+
+    let bubble_a = [{
     x: estados,
     y: cantidades,
-    /* text: estados, */
     mode: "markers",
     marker: {
       size: cantidades.map(c => Math.sqrt(20 * c)), 
@@ -112,12 +125,12 @@ function plotBubble(estados, cantidades){
   }];
 
   let layout2 = {
-    title: 'Bubble Chart',
+    title: 'Quantity of museums per state',
     width: '100%',  // Adjust the width to make it smaller
     height: 500, // Adjust the height to make it smaller
     xaxis: { automargin: true },
-    /* yaxis: { automargin: true }, */
   };
 
-  Plotly.newPlot("bar2", bubble_a, layout2);
+  Plotly.newPlot("bar2", bubble_a, layout2); 
+  /* Plotly.newPlot("bar2", chart);  */
 };

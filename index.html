@@ -26,8 +26,14 @@
 
       <!-- The div to hold the menu -->
       <div class="menu-container">
+        <p>Kindly select a state from menu below. </p>
+        <ul>
+          <li>Bar chart will update</li>
+          <li>Markers will show in map</li> 
+          <li>Markers are clickable for further data</li>
+        </ul>
         <div class="well">
-          <h5>Museos</h5>
+          <h3>State list</h3>
           <select id="selDataset" onchange="optionChanged(this.value)"></select>
         </div>
       </div>
@@ -54,6 +60,10 @@
 
   <!-- Our JavaScript -->
   <script type="text/javascript" src="static/js/logic.js"></script>
+
+  <!-- Include C3.js library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.20/c3.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.20/c3.min.css">
 </body>
 
 </html>

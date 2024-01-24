@@ -10,7 +10,8 @@ body, html {
 }
 
 .map-container {
-  flex: 0.6;
+  /* flex: 0.6; */
+  flex: 0.25;
   display: flex;
 }
 
@@ -19,7 +20,8 @@ body, html {
 }
 
 .menu-container {
-  flex: .1;
+  /* flex: .1; */
+  flex: .3;
   background-color: #f0f0f0;
   padding: 10px;
   box-sizing: border-box;
@@ -38,9 +40,13 @@ body, html {
 }
 
 #bar {
-  width:100%;
+  width: 100%;
 }
 
 #bar2 {
-  width:100%;
+  width: 100%;
 }
+
+/* #bar3 {
+  width:20%;
+} */

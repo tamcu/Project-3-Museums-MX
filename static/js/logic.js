@@ -2,7 +2,8 @@
 // Create the map, originally centered at TX
 let myMap = L.map("map", {
   center: [18.5335298, -99.9407924],
-  zoom: 5.4,
+  /* zoom: 5.4, */
+  zoom: 4,
 });
 
 // Insert the base layer to the map
@@ -12,21 +13,23 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
 }).addTo(myMap);
 
 // Create empty initial bar chart
-let bar_a = [{
-  type: "bar",
-  x: [],
-  y: [],
-  orientation: "h",
-}];
+function init(){
+  let bar_a = [{
+    type: "bar",
+    x: [],
+    y: [],
+    orientation: "h",
+  }];
 
-let layout1 = {
-  title: 'Quantity of museums in selected state, per topic',
-  width: '100%',  // Adjust the width to make it smaller
-  height: 500, // Adjust the height to make it smaller
-  yaxis: { automargin: true },
+  let layout1 = {
+    title: 'Quantity of museums in selected state, per topic',
+    width: '100%',  // Adjust the width to make it smaller
+    height: 500, // Adjust the height to make it smaller
+    yaxis: { automargin: true },
+  };
+
+  Plotly.newPlot("bar", bar_a, layout1);
 };
-
-Plotly.newPlot("bar", bar_a, layout1);
 
 d3.json("../Datasets/project_3.museums_mx_csv.json").then(function (data) {
   let estados = [];
@@ -44,8 +47,12 @@ d3.json("../Datasets/project_3.museums_mx_csv.json").then(function (data) {
   };
   cantidades.push(suma);
 
-  plotBubble(estados, cantidades);
+  console.log(estados);
+  console.log(cantidades);
 
+  /* plotBubble(estados, cantidades); */
+  plotApex(estados, cantidades);
+  
   let dropdownMenu = d3.select("#selDataset");
   dropdownMenu.append("option").text("Select a state...");
   estados.forEach(function (nombre) {
@@ -73,12 +80,39 @@ function plots(name_value) {
       }
     };
 
-    let bar_y = Object.keys(temas).sort();
+    let bar_y = Object.keys(temas).sort(); 
     let bar_x = Object.values(temas);
+
+    /* console.log(bar_y);
+    console.log(bar_x); */
 
     // Update the first bar chart
     Plotly.update("bar", { x: [bar_x], y: [bar_y] });
 
+/*     let chart = new ApexCharts(document.querySelector("#bar"), options);
+    chart.render(); 
+
+    chart.updateOptions = {
+      series: [{
+      data: bar_x,
+      }],
+      chart: {
+      type: 'bar',
+      },
+      plotOptions: {
+        bar: {
+          borderRadius: 4,
+          horizontal: true,
+        }
+      },
+      dataLabels: {
+        enabled: true,
+      },
+      xaxis: {
+        categories: bar_y,
+      }
+    }; */
+    
     // Add markers to the map
     let markers = [];
     for (let i = 0; i < name_a.length; i++) {
@@ -100,20 +134,27 @@ function optionChanged(selectedValue) {
 }
 
 function plotBubble(estados, cantidades){
-  console.log(estados);
-  console.log(cantidades);
-  
-/*   let chart = c3.generate({
-    bindto : "#bar2",
-    data : {
-      x : "x", 
-      columns : [["x"].concat(estados), ["y"].concat(cantidades),],
-      type : "scatter",
-    },
-    type : bubble, 
-  }); */
+  /* console.log(estados);
+  console.log(cantidades); */
 
-    let bubble_a = [{
+  /* let options = {
+    chart: {
+      type: "bubble",
+    },
+    series: [{
+      name: "cantidades",
+      data: cantidades.map(c => Math.sqrt(20 * c)),
+    }],
+    xaxis: {
+      categories: estados,
+    }
+  }
+  
+  let chart = new ApexCharts(document.querySelector("#bar2"), options);
+  
+  chart.render(); */
+
+  let bubble_a = [{
     x: estados,
     y: cantidades,
     mode: "markers",
@@ -132,5 +173,65 @@ function plotBubble(estados, cantidades){
   };
 
   Plotly.newPlot("bar2", bubble_a, layout2); 
-  /* Plotly.newPlot("bar2", chart);  */
 };
+
+function plotApex(estados, cantidades){
+  let options = {
+    chart: {
+      type: 'bubble'
+    },
+    series: [{
+      name: 'museos',
+      data: cantidades
+    }],
+    xaxis: {
+      categories: estados
+    },
+    theme: {
+      palette: 'palette10' // upto palette10
+    }
+  };
+
+  /* let options = {
+    series: [{
+      name: "cantidades",
+      data: cantidades,
+      size: cantidades.map(c => c / 10)
+    }],
+    chart: {
+      type: "bubble"
+    },
+    dataLabels: {
+      enabled: false
+    },
+    fill: {
+      opacity: 0.8
+    },
+    title: {
+      text: 'Simple Bubble Chart'
+    },
+    xaxis: {
+      /* tickAmount: 12,
+      type: 'category',
+      categories: estados
+    },
+    yaxis: {
+      max: 200
+    },
+    plotOptions: {
+      bubble: {
+        zScaling: true,
+        minBubbleRadius: undefined,
+        maxBubbleRadius: undefined,
+      }
+    }
+  } */
+  
+  let chart = new ApexCharts(document.querySelector("#bar2"), options);
+  
+  chart.render();
+}
+
+
+init();
+

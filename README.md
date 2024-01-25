@@ -8,7 +8,7 @@ Mexico’s Museum Directory
 ## Objective
 This project aims to create an interactive and visually compelling Museum Directory for México. 
 
-Utilizing a dataset available in [Sistema de Información Cultural](sic.cultura.gob.mx), this directory will serve as a comprehensive resource for the nation's cultural diversity.
+Utilizing a dataset available in [Sistema de Información Cultural](https://sic.cultura.gob.mx/), this directory will serve as a comprehensive resource for the nation's cultural diversity.
 
 
 ## Inspiration

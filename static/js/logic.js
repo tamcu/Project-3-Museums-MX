@@ -1,14 +1,12 @@
 
-// Create the map, originally centered at TX
+// Create the map
 let myMap = L.map("map", {
   center: [21.5335298, -99.9407924],
-  /* zoom: 5.4, */
   zoom: 5,
 });
 
 // Insert the base layer to the map
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-  /* link: 'Powered by <a href="https://www.geoapify.com/">Geoapify</a>', */
   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors', 
 }).addTo(myMap);
 
@@ -47,7 +45,6 @@ d3.json("../Datasets/project_3.museums_mx_csv.json").then(function (data) {
   };
   cantidades.push(suma);
 
-  /* plotBubble(estados, cantidades); */
   plotApex(estados, cantidades);
   
   let dropdownMenu = d3.select("#selDataset");
@@ -80,36 +77,9 @@ function plots(name_value) {
     let bar_y = Object.keys(temas).sort(); 
     let bar_x = Object.values(temas);
 
-    /* console.log(bar_y);
-    console.log(bar_x); */
-
-    // Update the first bar chart
+    // Update bar chart
     Plotly.update("bar", { x: [bar_x], y: [bar_y] });
 
-/*     let chart = new ApexCharts(document.querySelector("#bar"), options);
-    chart.render(); 
-
-    chart.updateOptions = {
-      series: [{
-      data: bar_x,
-      }],
-      chart: {
-      type: 'bar',
-      },
-      plotOptions: {
-        bar: {
-          borderRadius: 4,
-          horizontal: true,
-        }
-      },
-      dataLabels: {
-        enabled: true,
-      },
-      xaxis: {
-        categories: bar_y,
-      }
-    }; */
-    
     // Add markers to the map
     let markers = [];
     for (let i = 0; i < name_a.length; i++) {
@@ -130,76 +100,9 @@ function optionChanged(selectedValue) {
   plots(selectedValue);
 }
 
-function plotBubble(estados, cantidades){
-  /* console.log(estados);
-  console.log(cantidades); */
-
-  /* let options = {
-    chart: {
-      type: "bubble",
-    },
-    series: [{
-      name: "cantidades",
-      data: cantidades.map(c => Math.sqrt(20 * c)),
-    }],
-    xaxis: {
-      categories: estados,
-    }
-  }
-  
-  let chart = new ApexCharts(document.querySelector("#bar2"), options);
-  
-  chart.render(); */
-
-  let bubble_a = [{
-    x: estados,
-    y: cantidades,
-    mode: "markers",
-    marker: {
-      size: cantidades.map(c => Math.sqrt(20 * c)), 
-      color: cantidades,
-      colorscale: "Jet",
-    },
-  }];
-
-  let layout2 = {
-    title: 'Quantity of museums per state',
-    width: "100%",  // Adjust the width to make it smaller
-    height: 400, // Adjust the height to make it smaller
-    xaxis: { automargin: true },
-  };
-
-  Plotly.newPlot("bar2", bubble_a, layout2); 
-};
-
 function plotApex(estados, cantidades){
-  /* let options = {
-    chart: {
-      type: 'line'
-    },
-    series: [{
-      name: 'museos',
-      data: cantidades
-    }],
-    xaxis: {
-      categories: estados
-    },
-    theme: {
-      palette: 'palette10' // upto palette10
-    }
-  }; */
-
   let c = cantidades.map((e, i) => [i+1, cantidades[i], cantidades[i]]);
-  /* console.log(cantidades, c, [c]); */
-
-  /* let fin = c.map((e, i) => [e, c[i]]); 
-  console.log(fin); */
-
-
   let options = {
-     /* markers: {
-      size: cantidades,
-    },  */
     series: [{
       name: "museums",
       data: c,
@@ -213,26 +116,8 @@ function plotApex(estados, cantidades){
       width: 950,
       type: "bubble",
     },
-    /* dataLabels: {
-      enabled: false
-    }, */
-    /* colors: ['#2E93fA', '#66DA26', '#546E7A', '#E91E63', '#FF9800'], */
-    /* colors: [function({ value, seriesIndex, w }) {
-      if (value < 55) {
-          return '#7E36AF'
-      } else {
-          return '#D9534F'
-      }
-    }, function({ value, seriesIndex, w }) {
-      if (value < 111) {
-          return '#7E36AF'
-      } else {
-          return '#D9534F'
-      }
-    }], */
     fill: {
       opacity: 0.6,
-      /* type: "gradient", */
     },
     title: {
       text: 'Quantity of museums per state',
@@ -246,26 +131,7 @@ function plotApex(estados, cantidades){
       type: 'category',
       categories: estados,
       tickAmount: 31,
-      /* labels : {
-        style : {
-          fontSize : "12px"
-        }
-      } */
-      /* axisBorder: {
-        show: true,
-        color: '#78909C',
-        height: 1,
-        width: '100%',
-        offsetX: 0,
-        offsetY: 0
-    }, */
     },
-    /* yaxis: {
-      max: 180
-    },  */
-    /* zaxis: {
-      size: cantidades
-    }, */
     plotOptions: {
       bubble: {
         zScaling: false,
@@ -286,6 +152,4 @@ function plotApex(estados, cantidades){
   chart.render();
 }
 
-
 init();
-

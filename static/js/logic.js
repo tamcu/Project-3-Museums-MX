@@ -1,9 +1,9 @@
 
 // Create the map, originally centered at TX
 let myMap = L.map("map", {
-  center: [18.5335298, -99.9407924],
+  center: [21.5335298, -99.9407924],
   /* zoom: 5.4, */
-  zoom: 4,
+  zoom: 5,
 });
 
 // Insert the base layer to the map
@@ -23,8 +23,8 @@ function init(){
 
   let layout1 = {
     title: 'Quantity of museums in selected state, per topic',
-    width: '100%',  // Adjust the width to make it smaller
-    height: 500, // Adjust the height to make it smaller
+    width: "100%",  // Adjust the width to make it smaller
+    height: 400, // Adjust the height to make it smaller
     yaxis: { automargin: true },
   };
 
@@ -46,9 +46,6 @@ d3.json("../Datasets/project_3.museums_mx_csv.json").then(function (data) {
     }
   };
   cantidades.push(suma);
-
-  console.log(estados);
-  console.log(cantidades);
 
   /* plotBubble(estados, cantidades); */
   plotApex(estados, cantidades);
@@ -117,12 +114,12 @@ function plots(name_value) {
     let markers = [];
     for (let i = 0; i < name_a.length; i++) {
       let marker = L.marker([name_a[i].gmaps_latitud, name_a[i].gmaps_longitud])
-        .bindPopup(`<h1>${name_a[i].museo_nombre}</h1> <hr> 
-         <h3>Municipio: ${name_a[i].nom_mun}</h3> <hr> 
-         <h3>Temática: ${name_a[i].museo_tematica_n1}</h3>
-         <h3>Adscripción: ${name_a[i].museo_adscripcion}</h3>
-         <h3>Teléfono: ${name_a[i].museo_telefono1}</h3>
-         <h3>Web: ${name_a[i].pagina_web}</h3>`)
+        .bindPopup(`<h3>${name_a[i].museo_nombre}</h3> 
+         <h4>Municipio: ${name_a[i].nom_mun}</h4> 
+         <h4>Temática: ${name_a[i].museo_tematica_n1}</h4>
+         <h4>Adscripción: ${name_a[i].museo_adscripcion}</h4>
+         <h4>Teléfono: ${name_a[i].museo_telefono1}</h4>
+         <h4>Web: ${name_a[i].pagina_web}</h4>`)
         .addTo(myMap);
       markers.push(marker);
     }
@@ -167,8 +164,8 @@ function plotBubble(estados, cantidades){
 
   let layout2 = {
     title: 'Quantity of museums per state',
-    width: '100%',  // Adjust the width to make it smaller
-    height: 500, // Adjust the height to make it smaller
+    width: "100%",  // Adjust the width to make it smaller
+    height: 400, // Adjust the height to make it smaller
     xaxis: { automargin: true },
   };
 
@@ -176,9 +173,9 @@ function plotBubble(estados, cantidades){
 };
 
 function plotApex(estados, cantidades){
-  let options = {
+  /* let options = {
     chart: {
-      type: 'bubble'
+      type: 'line'
     },
     series: [{
       name: 'museos',
@@ -190,42 +187,99 @@ function plotApex(estados, cantidades){
     theme: {
       palette: 'palette10' // upto palette10
     }
-  };
+  }; */
 
-  /* let options = {
+  let c = cantidades.map((e, i) => [i+1, cantidades[i], cantidades[i]]);
+  /* console.log(cantidades, c, [c]); */
+
+  /* let fin = c.map((e, i) => [e, c[i]]); 
+  console.log(fin); */
+
+
+  let options = {
+     /* markers: {
+      size: cantidades,
+    },  */
     series: [{
-      name: "cantidades",
-      data: cantidades,
-      size: cantidades.map(c => c / 10)
+      name: "museums",
+      data: c,
     }],
     chart: {
-      type: "bubble"
+      animations: {
+        enabled: true,
+        speed: 5000,
+      },
+      height: 400,
+      width: 950,
+      type: "bubble",
     },
-    dataLabels: {
+    /* dataLabels: {
       enabled: false
-    },
+    }, */
+    /* colors: ['#2E93fA', '#66DA26', '#546E7A', '#E91E63', '#FF9800'], */
+    /* colors: [function({ value, seriesIndex, w }) {
+      if (value < 55) {
+          return '#7E36AF'
+      } else {
+          return '#D9534F'
+      }
+    }, function({ value, seriesIndex, w }) {
+      if (value < 111) {
+          return '#7E36AF'
+      } else {
+          return '#D9534F'
+      }
+    }], */
     fill: {
-      opacity: 0.8
+      opacity: 0.6,
+      /* type: "gradient", */
     },
     title: {
-      text: 'Simple Bubble Chart'
+      text: 'Quantity of museums per state',
+      align: "center",
+      style: {
+        fontSize: "20px",
+        fontWeight: "light",
+      }
     },
     xaxis: {
-      /* tickAmount: 12,
       type: 'category',
-      categories: estados
+      categories: estados,
+      tickAmount: 31,
+      /* labels : {
+        style : {
+          fontSize : "12px"
+        }
+      } */
+      /* axisBorder: {
+        show: true,
+        color: '#78909C',
+        height: 1,
+        width: '100%',
+        offsetX: 0,
+        offsetY: 0
+    }, */
     },
-    yaxis: {
-      max: 200
-    },
+    /* yaxis: {
+      max: 180
+    },  */
+    /* zaxis: {
+      size: cantidades
+    }, */
     plotOptions: {
       bubble: {
-        zScaling: true,
+        zScaling: false,
         minBubbleRadius: undefined,
         maxBubbleRadius: undefined,
       }
+    },
+    theme: {
+      palette: 'palette10' // upto palette10
+    },
+    tooltip: {
+      theme : "dark",
     }
-  } */
+  }
   
   let chart = new ApexCharts(document.querySelector("#bar2"), options);
   
